@@ -3,10 +3,10 @@ version = '1.0.0'
 
 buildscript {
     repositories {
-        mavenRepo urls: 'http://jvoegele.com/maven2/'
+        mavenRepo urls: 'http://maven.teamcodeflux.com/external/'
     }
     
-    def gradleAndroidPluginVersion = '1.0.0'
+    def gradleAndroidPluginVersion = '1.1.0-SNAPSHOT'
     
     dependencies {
         classpath "com.jvoegele.gradle.plugins:android-plugin:$gradleAndroidPluginVersion"
