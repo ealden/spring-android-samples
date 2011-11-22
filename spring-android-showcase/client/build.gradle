@@ -70,12 +70,12 @@ clean {
     delete 'gen'
 }
 
-//androidSignAndAlign {
-//    keyStore = 'debug.keystore'
-//    keyAlias = 'androiddebugkey'
-//    keyStorePassword = 'android'
-//    keyAliasPassword = 'android'
-//}
+androidSignAndAlign {
+    keyStore = 'debug.keystore'
+    keyAlias = 'androiddebugkey'
+    keyStorePassword = 'android'
+    keyAliasPassword = 'android'
+}
 
 processResources {
     expand(project.properties)
