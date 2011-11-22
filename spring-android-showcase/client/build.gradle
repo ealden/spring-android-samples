@@ -1,0 +1,109 @@
+group = 'org.springframework.android'
+version = '1.0.0'
+
+buildscript {
+    repositories {
+        mavenRepo urls: 'http://jvoegele.com/maven2/'
+    }
+    
+    def gradleAndroidPluginVersion = '1.0.0'
+    
+    dependencies {
+        classpath "com.jvoegele.gradle.plugins:android-plugin:$gradleAndroidPluginVersion"
+    }
+}
+
+apply plugin: 'android'
+apply plugin: 'idea'
+
+def compatibilityVersion = 1.6
+sourceCompatibility = compatibilityVersion
+targetCompatibility = compatibilityVersion
+
+repositories {
+    mavenCentral()
+    mavenRepo urls: 'http://maven.springframework.org/snapshot'
+    mavenRepo urls: 'http://maven.springframework.org/milestone'
+}
+
+def springAndroidVersion = '1.0.0.BUILD-SNAPSHOT'
+def springSocialVersion = '1.0.0.RELEASE'
+def springSecurityCryptoVersion = '3.1.0.RC3'
+def jacksonVersion = '1.9.1'
+def gsonVersion = '1.7.2'
+def simpleVersion = '2.6.2'
+
+dependencies {
+    compile "org.springframework.android:spring-android-rest-template:$springAndroidVersion"
+    compile("org.springframework.android:spring-android-auth:$springAndroidVersion") {
+        exclude module: 'spring-security-crypto'
+    }
+    compile("org.springframework.security:spring-security-crypto:$springSecurityCryptoVersion") {
+        exclude module: 'spring-core'
+    }
+    compile("org.springframework.social:spring-social-twitter:$springSocialVersion") {
+        exclude module: 'spring-web'
+        exclude module: 'commons-logging'
+    }
+    compile("org.springframework.social:spring-social-facebook:$springSocialVersion") {
+        exclude module: 'spring-web'
+        exclude module: 'commons-logging'
+    }
+    compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
+    compile "com.google.code.gson:gson:$gsonVersion"
+    compile("org.simpleframework:simple-xml:$simpleVersion") {
+        exclude module: 'stax'
+        exclude module: 'stax-api'
+        exclude module: 'xpp3'
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+clean {
+    delete 'gen'
+}
+
+//androidSignAndAlign {
+//    keyStore = 'debug.keystore'
+//    keyAlias = 'androiddebugkey'
+//    keyStorePassword = 'android'
+//    keyAliasPassword = 'android'
+//}
+
+processResources {
+    expand(project.properties)
+}
+
+task configureDebug << {
+    jar.classifier = 'debug'
+}
+
+task configureRelease << {
+    proguard.enabled = true
+}
+
+androidEmulatorStart {
+    avdName = 'myavd'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+    project {
+        jdkName = 'Android 2.1-update1 Platform'
+        languageLevel = compatibilityVersion
+    }
+}
+
+androidProcessResources.dependsOn clean
+
+defaultTasks 'assemble'
